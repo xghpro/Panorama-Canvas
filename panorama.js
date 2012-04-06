@@ -30,7 +30,7 @@ var draw = function(){
 	if(2*((Math.abs(pos_x)+ctx.canvas.width))>img.width){
 		ctx.drawImage(img, (pos_x+img.width), pos_y);
 	}
-	if(2*((Math.abs(pos_x)-ctx.canvas.width))<img.width){
+	if(2*((Math.abs(pos_x)>ctx.canvas.width))<img.width){
 		ctx.drawImage(img, (pos_x-img.width), pos_y);
 	}
 	ctx.drawImage(img, pos_x, pos_y);
