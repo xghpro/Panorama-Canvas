@@ -5,6 +5,8 @@ var pos_y = 0;
 
 var play_arg = 0;
 
+var turn_right = true; //true = right, false = left
+
 var img = new Image();
 img.src="example.jpg";
 
@@ -55,21 +57,29 @@ var move_pic_left = function(pix, i){
 	}, 10);
 }
 
-var play_right = function(){
+var play = function(){
 	play_arg = 0;
-	go_right();
+	go_round();
 }
 
-var go_right = function(){
+var go_round = function(){
 	if(play_arg!=1){
 		setTimeout(function(){
-			pos_x -= 4;
+			if(turn_right){
+				pos_x -= 4;
+			} else {
+				pos_x += 4;
+			}
 			draw();
-			self.go_right();
+			self.go_round();
 		},20);
 	}
 }
 
 var stop_play = function(){
 	play_arg = 1;
+}
+
+var change_dir = function(){
+	turn_right = !turn_right;
 }
