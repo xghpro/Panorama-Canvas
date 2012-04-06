@@ -14,12 +14,12 @@ var draw = function(){
 	var ctx = c.getContext("2d");
 	ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
 
-	if((Math.abs(pos_x))>=img.width){
+	if(pos_x>=img.width){
+		pos_x -=img.width;
+	} else {
+		if((Math.abs(pos_x))>=img.width){
 				pos_x += img.width;
 	}
-
-	if((Math.abs(pos_x))<=img.width){
-		pos_x -=img.width;
 	}
 
 	if(scale_both!=1){
