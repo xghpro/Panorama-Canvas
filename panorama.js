@@ -20,8 +20,8 @@ var draw = function(){
 		pos_x -=img.width;
 	} else {
 		if((Math.abs(pos_x))>=img.width){
-				pos_x += img.width;
-	}
+			pos_x += img.width;
+		}
 	}
 
 	if(scale_both!=1){
@@ -55,6 +55,14 @@ var move_pic_left = function(pix, i){
 			self.move_pic_left(pix, i+5)
 		}
 	}, 10);
+}
+
+var move = function(pix){
+	if(turn_right){
+		move_pic_right(pix, 0);
+	} else {
+		move_pic_left(pix, 0);
+	}
 }
 
 var play = function(){
