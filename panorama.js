@@ -142,21 +142,23 @@ var mouseWheel = function(n){
 			current_scale = 0.3;
 		} else {
 			if(current_scale < 1.0){
-				new_scale = (current_scale+0.1)/current_scale;
+				new_scale = (current_scale + 0.1)/current_scale;
 				current_scale += 0.1;
 			}
 		}
 	} else {
-		if(current_scale === 0.3){
+		if(current_scale === 0.30000000000000004){
 			new_scale = min_scale/current_scale;
 			current_scale = min_scale;
+			console.log("Reached min");
 		} else {
-			if(current_scale > min_scale){
-				new_scale = (current_scale-0.1)/current_scale;
+			if(current_scale > 0.3){
+				new_scale = (current_scale - 0.1)/current_scale;
 				current_scale -= 0.1;
 			}
 		}
 	}
+	console.log(current_scale);
 	scale_both = new_scale;
 	draw();
 }
