@@ -1,5 +1,3 @@
-var scale_both = 0.2621;
-
 var pos_x = 0;
 var pos_y = 0;
 
@@ -9,6 +7,12 @@ var turn_right = true; //true = right, false = left
 
 var img = new Image();
 img.src="example.jpg";
+
+var scale_both = 0.2621;
+
+var mouseClick = false;
+var initX = 0;
+var initY = 0;
 
 var draw = function(){
 
@@ -90,4 +94,39 @@ var stop_play = function(){
 
 var change_dir = function(){
 	turn_right = !turn_right;
+}
+
+var initialize = function(){
+	var can = document.getElementById("panorama");
+	can.onmousedown = mouseDown;
+	window.onmouseup = mouseUp;
+	window.onmousemove = mouseMove;
+	draw();
+}
+
+var mouseDown = function(n){
+	mouseClick = true;
+	initX = n.clientX;
+	initY = n.clientY;
+	draw();
+}
+
+var mouseUp = function(n){
+	mouseClick = false;
+	initX = n.clientX;
+	initY = n.clientY;
+	draw();
+}
+
+var mouseMove = function(n){
+	if(mouseClick){
+		var movepix = (n.clientX - initX);
+		if(movepix < 0){
+			turn_right = false;
+			console.log("test");
+		} else {
+			turn_right = true;
+		};
+		move(Math.abs(movepix));
+	}
 }
