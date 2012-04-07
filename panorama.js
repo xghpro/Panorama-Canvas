@@ -8,7 +8,10 @@ var turn_right = true; //true = right, false = left
 var img = new Image();
 img.src="example.jpg";
 
-var scale_both = 0.2621;
+var min_scale = 0.2621;
+var max_scale = 1;
+var current_scale = min_scale;
+var scale_both = current_scale;
 
 var mouseClick = false;
 var initX = 0;
@@ -99,6 +102,7 @@ var change_dir = function(){
 var initialize = function(){
 	var can = document.getElementById("panorama");
 	can.onmousedown = mouseDown;
+	can.onmousewheel = mouseWheel;
 	window.onmouseup = mouseUp;
 	window.onmousemove = mouseMove;
 	draw();
@@ -123,10 +127,36 @@ var mouseMove = function(n){
 		var movepix = (n.clientX - initX);
 		if(movepix < 0){
 			turn_right = false;
-			console.log("test");
 		} else {
 			turn_right = true;
 		};
 		move(Math.abs(movepix));
 	}
+}
+
+var mouseWheel = function(n){
+	var new_scale;
+	if(n.wheelDelta > 0){
+		if(current_scale === min_scale){
+			new_scale = 0.3/current_scale;
+			current_scale = 0.3;
+		} else {
+			if(current_scale < 1.0){
+				new_scale = (current_scale+0.1)/current_scale;
+				current_scale += 0.1;
+			}
+		}
+	} else {
+		if(current_scale === 0.3){
+			new_scale = min_scale/current_scale;
+			current_scale = min_scale;
+		} else {
+			if(current_scale > min_scale){
+				new_scale = (current_scale-0.1)/current_scale;
+				current_scale -= 0.1;
+			}
+		}
+	}
+	scale_both = new_scale;
+	draw();
 }
