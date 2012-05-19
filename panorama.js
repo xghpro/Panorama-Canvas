@@ -1,53 +1,52 @@
-var pos_x = 0;
-var pos_y = 0;
+// Global variables
+var POS_X = 0;
+var POS_Y = 0;
+var INIT_X = 0;
+var INIT_Y = 0;
+var MINSCALE = 0.2621;
+var MAXSCALE = 1;
+var CURRENT_SCALE = MINSCALE;
+var SCALE = CURRENT_SCALE;
+var PLAY_ARG = false;
+var MOUSEDOWN = false;
+var TURN_RIGHT = true; //true = right, false = left
 
-var play_arg = 0;
-
-var turn_right = true; //true = right, false = left
-
+// Image information
 var img = new Image();
 img.src="example.jpg";
 
-var min_scale = 0.2621;
-var max_scale = 1;
-var current_scale = min_scale;
-var scale_both = current_scale;
-
-var mouseClick = false;
-var initX = 0;
-var initY = 0;
-
+// Functions
 var draw = function(){
 
 	var c = document.getElementById("panorama");
 	var ctx = c.getContext("2d");
 	ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
 
-	if(pos_x>=img.width){
-		pos_x -=img.width;
+	if(POS_X>=img.width){
+		POS_X -=img.width;
 	} else {
-		if((Math.abs(pos_x))>=img.width){
-			pos_x += img.width;
+		if((Math.abs(POS_X))>=img.width){
+			POS_X += img.width;
 		}
 	}
 
-	if(scale_both!=1){
-		ctx.scale(scale_both, scale_both);
-		scale_both = 1;
+	if(SCALE!=1){
+		ctx.scale(SCALE, SCALE);
+		SCALE = 1;
 	}
-	if(2*((Math.abs(pos_x)+ctx.canvas.width))>img.width){
-		ctx.drawImage(img, (pos_x+img.width), pos_y);
+	if(2*((Math.abs(POS_X)+ctx.canvas.width))>img.width){
+		ctx.drawImage(img, (POS_X+img.width), POS_Y);
 	}
-	if(pos_x > 0){
-		ctx.drawImage(img, (pos_x-img.width), pos_y);
+	if(POS_X > 0){
+		ctx.drawImage(img, (POS_X-img.width), POS_Y);
 	}
-	ctx.drawImage(img, pos_x, pos_y);
+	ctx.drawImage(img, POS_X, POS_Y);
 };
 
 var move_pic_right = function(pix, i){
 	setTimeout(function(){
 		if(i<=pix){
-			pos_x -= 5;
+			POS_X -= 5;
 			draw();
 			self.move_pic_right(pix, i+5);
 		}
@@ -57,7 +56,7 @@ var move_pic_right = function(pix, i){
 var move_pic_left = function(pix, i){
 	setTimeout(function(){
 		if(i<=pix){
-			pos_x += 5;
+			POS_X += 5;
 			draw();
 			self.move_pic_left(pix, i+5)
 		}
@@ -65,7 +64,7 @@ var move_pic_left = function(pix, i){
 }
 
 var move = function(pix){
-	if(turn_right){
+	if(TURN_RIGHT){
 		move_pic_right(pix, 0);
 	} else {
 		move_pic_left(pix, 0);
@@ -73,17 +72,17 @@ var move = function(pix){
 }
 
 var play = function(){
-	play_arg = 0;
+	PLAY_ARG = true;
 	go_round();
 }
 
 var go_round = function(){
-	if(play_arg!=1){
+	if(PLAY_ARG == true){
 		setTimeout(function(){
-			if(turn_right){
-				pos_x -= 4;
+			if(TURN_RIGHT){
+				POS_X -= 4;
 			} else {
-				pos_x += 4;
+				POS_X += 4;
 			}
 			draw();
 			self.go_round();
@@ -92,11 +91,11 @@ var go_round = function(){
 }
 
 var stop_play = function(){
-	play_arg = 1;
+	PLAY_ARG = false;
 }
 
 var change_dir = function(){
-	turn_right = !turn_right;
+	TURN_RIGHT = !TURN_RIGHT;
 }
 
 var initialize = function(){
@@ -109,26 +108,26 @@ var initialize = function(){
 }
 
 var mouseDown = function(n){
-	mouseClick = true;
-	initX = n.clientX;
-	initY = n.clientY;
+	MOUSEDOWN = true;
+	INIT_X = n.clientX;
+	INIT_Y = n.clientY;
 	draw();
 }
 
 var mouseUp = function(n){
-	mouseClick = false;
-	initX = n.clientX;
-	initY = n.clientY;
+	MOUSEDOWN = false;
+	INIT_X = n.clientX;
+	INIT_Y = n.clientY;
 	draw();
 }
 
 var mouseMove = function(n){
-	if(mouseClick){
-		var movepix = (n.clientX - initX);
+	if(MOUSEDOWN){
+		var movepix = (n.clientX - INIT_X);
 		if(movepix < 0){
-			turn_right = false;
+			TURN_RIGHT = false;
 		} else {
-			turn_right = true;
+			TURN_RIGHT = true;
 		};
 		move(Math.abs(movepix));
 	}
@@ -137,28 +136,28 @@ var mouseMove = function(n){
 var mouseWheel = function(n){
 	var new_scale;
 	if(n.wheelDelta > 0){
-		if(current_scale === min_scale){
-			new_scale = 0.3/current_scale;
-			current_scale = 0.3;
+		if(CURRENT_SCALE === MINSCALE){
+			new_scale = 0.3/CURRENT_SCALE;
+			CURRENT_SCALE = 0.3;
 		} else {
-			if(current_scale < 1.0){
-				new_scale = (current_scale + 0.1)/current_scale;
-				current_scale += 0.1;
+			if(CURRENT_SCALE < 1.0){
+				new_scale = (CURRENT_SCALE + 0.1)/CURRENT_SCALE;
+				CURRENT_SCALE += 0.1;
 			}
 		}
 	} else {
-		if(current_scale === 0.30000000000000004){
-			new_scale = min_scale/current_scale;
-			current_scale = min_scale;
+		if(CURRENT_SCALE === 0.30000000000000004){
+			new_scale = MINSCALE/CURRENT_SCALE;
+			CURRENT_SCALE = MINSCALE;
 			console.log("Reached min");
 		} else {
-			if(current_scale > 0.3){
-				new_scale = (current_scale - 0.1)/current_scale;
-				current_scale -= 0.1;
+			if(CURRENT_SCALE > 0.3){
+				new_scale = (CURRENT_SCALE - 0.1)/CURRENT_SCALE;
+				CURRENT_SCALE -= 0.1;
 			}
 		}
 	}
-	console.log(current_scale);
-	scale_both = new_scale;
+	console.log(CURRENT_SCALE);
+	SCALE = new_scale;
 	draw();
 }
